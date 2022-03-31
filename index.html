@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Muhammad Afifudin">
+	<meta name="description" content="WebApp Presensi Kaizala merupakan aplikasi website yang dapat mengkonversi format waktu presensi UTC menjadi zona waktu Indonesia, serta dapat membuat rekap presensi untuk setiap pegawai.">
+	<meta name="keywords" content="Presensi, Kaizala, Konversi, Convert, Absensi, Kehadiran, Online, Attendance Report, Attendance Request, WebApp, BPS, Badan Pusat Statistik">
+	<meta name="theme-color" content="#1572e8">
+	<meta property="og:site_name" content="Presensi Kaizala">
+	<meta property="og:description" content="WebApp Presensi Kaizala merupakan aplikasi website yang dapat mengkonversi format waktu presensi UTC menjadi zona waktu Indonesia, serta dapat membuat rekap presensi untuk setiap pegawai.">
+	<meta property="og:image" content="https://afiiif.github.io/presensi-kaizala/assets/img/bps-presensi-kaizala-og-img.png">
+	<meta property="og:title" content="Presensi Kaizala · Konversi hasil ekspor attendance request">
+	<meta property="og:url" content="https://afiiif.github.io/presensi-kaizala/">
+	<title>Presensi Kaizala · Konversi hasil ekspor attendance request</title>
+
+	<link rel="shortcut icon" href="https://webapp.kaiza.la/web-app-images/favicon.ico?v=2" type="image/x-icon">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.20/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
+	<link rel="stylesheet" href="lib/atlantis-lite/mod/atlantis.mod.css">
+	<link rel="stylesheet" href="assets/css/main.css?v=1.4.1">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+</head>
+<body>
+
+	<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+		<div class="modal-dialog" id="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modal-title"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Batal"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body" id="modal-body"></div>
+				<div class="border-top text-danger text-right" id="modal-error" style="display: none;"></div>
+				<div class="modal-footer" id="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+
+	<header class="main-header">
+		<div class="logo-header p-0 w-100 lh-100" data-background-color="blue">
+			<div class="container-fluid px-lg-4 px-xl-5">
+				<div class="d-flex align-items-center">
+					<a href="" class="text-white text-decoration-none d-block pr-35">Presensi Kaizala</a>
+					<div class="ml-auto"><a class="github-button" href="https://github.com/afiiif/presensi-kaizala" data-show-count="true" aria-label="Star afiiif/presensi-kaizala on GitHub">Star</a></div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<div class="pt-55 pb-4"></div>
+
+	<main class="container-fluid px-lg-4 px-xl-5">
+		<section id="section-input">
+			<div class="alert alert-info pl-3 pr-5 mb-45 alert-dismissible fade show" role="alert">
+				<button type="button" aria-hidden="true" class="close z-3 pt-1 pb-45" data-notify="dismiss" data-dismiss="alert" aria-label="Tutup" style="position: absolute; right: 10px; top: 5px; z-index: 1033;">×</button>
+				<div class="row row-8">
+					<div class="col-auto pt-1"><i class="far fa-lightbulb text-white bg-info fz-22 rounded-circle text-center" style="width: 35px; height: 35px; line-height: 35px;"></i></div>
+					<div class="col">
+						<div data-notify="message" class="text-muted">
+							<div>Hasil ekspor dari <i>attendance report</i> aplikasi Kaizala memiliki format waktu UTC. Oleh karena itu, perlu dilakukan konversi terhadap data waktu tersebut agar sesuai dengan zona waktu di Indonesia. Situs ini hadir untuk memudahkan Anda melakukan konversi waktu, sekaligus memudahkan pembuatan laporan presensi <i>online</i> per pegawai.</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row row-8 align-items-center mb-35">
+				<div class="col-auto">Zona Waktu:</div>
+				<div class="col-auto" style="width: 90px;">
+					<select id="select-timezone" class="selectpicker" data-width="100%" data-style="btn-sm btn-primary btn-border bg-white">
+						<option value="7">WIB</option>
+						<option value="8">WITA</option>
+						<option value="9">WIT</option>
+					</select>
+				</div>
+			</div>
+			<input type="file" accept=".csv,.zip" id="input-files" class="d-none" multiple>
+			<div class="dropzone cur-p" id="dropzone">
+				<div class="dropzone-inner">
+					<div class="mb-35 d-inline-block position-relative">
+						<i class="fas fa-circle fz-22 text-white position-absolute z-5" style="top: 8px; left: -16px;"></i>
+						<i class="fas fa-plus-circle fz-22 position-absolute z-5" style="top: 8px; left: -16px;"></i>
+						<i class="fas fa-file-csv fz-52 text-success op-7"></i>
+						<i class="fas fa-file-archive fz-52 text-warning op-7 ml-2"></i>
+					</div>
+					<div class="fz-16 fz-md-20">
+						<div class="fw-6">Klik untuk memilih file <div class="d-inline-block"><span class="text-success">CSV</span> atau <span class="text-warning">ZIP</span></div></div>
+						<div class="fw-3">atau drag & drop file di sini</div>
+					</div>
+				</div>
+			</div>
+			<h3 class="fw-6 mt-45 mb-35">Panduan Penggunaan</h3>
+			<div class="row">
+				<div class="col-sm-6 col-lg position-relative">
+					<div class="custom-card-number">1</div>
+					<div class="card">
+						<div class="card-body">
+							<div>Export Attendance Report pada aplikasi Kaizala melalui fitur <span class="fw-6 text-primary">Share Attendance Report</span>, kemudian dapatkan link untuk mengunduh hasil export dengan menekan <span class="fw-6 text-primary">Tap to share link</span>.</div>
+							<div class="mx--2">
+								<a href="assets/img/cara-export-attendance.png" data-toggle="lightbox" data-gallery="help" class="d-block bg-lightgray mt-3 border" style="width: 100%; padding-bottom: 50%; background-image: url('assets/img/cara-export-attendance.png'); background-size: cover; background-position: bottom;"></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-lg position-relative">
+					<div class="custom-card-number">2</div>
+					<div class="card">
+						<div class="card-body">
+							<div>Unduh file dari link tadi, maka didapatlah file berekstensi <span class="fw-6">zip</span>. Ambil file <span class="text-primary">SurveyResponse.csv</span> di dalamnya.</div>
+							<a href="assets/img/kaizala-zip.png" data-toggle="lightbox" data-gallery="help" class="d-block bg-lightgray mt-3 mx--2 border">
+								<img src="assets/img/kaizala-zip.png" class="w-100">
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-lg position-relative">
+					<div class="custom-card-number">3</div>
+					<div class="card">
+						<div class="card-body">
+							<div>Atur zona waktu yang diinginkan, kemudian masukkan file-file CSV atau ZIP ke dalam aplikasi website ini.</div>
+							<a href="assets/img/presensi-kaizala.gif" data-toggle="lightbox" data-gallery="help" class="d-block bg-lightgray mt-3 mx--2 border">
+								<img src="assets/img/presensi-kaizala.gif" class="w-100">
+							</a>
+							<div class="d-flex mt-25">
+								<div><i class="fas fa-lightbulb text-warning mr-2"></i></div>
+								<div>Anda dapat memilih banyak file sekaligus.</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-lg position-relative">
+					<div class="custom-card-number">4</div>
+					<div class="card">
+						<div class="card-body">
+							<div class="text-center d-flex h-100 align-items-center justify-content-center">
+								<div>
+									<i class="icon-check fz-72 text-success"></i>
+									<div class="mt-25">Selesai</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-body border-top pt-3">Anda dapat melakukan export data ke dalam file <span class="text-primary">XLS</span>, mengurutkan baris pada tabel, dan melakukan filter presensi berdasarkan pegawai.</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="section-result" style="display: none;">
+			<div class="row row-8 align-items-center mb-3">
+				<div class="col-sm py-15">
+					<h3 class="fw-6 mb-0">Rekap Presensi</h3>
+				</div>
+				<div class="col-auto" style="width: 90px;">
+					<select id="select-timezone-2" class="selectpicker" data-width="100%" data-style="btn-sm btn-primary btn-border bg-white">
+						<option value="7">WIB</option>
+						<option value="8">WITA</option>
+						<option value="9">WIT</option>
+					</select>
+				</div>
+				<div class="col text-right">
+					<button id="btn-export" type="button" class="btn btn-icon btn-round btn-success mr-2" data-toggle="tooltip" title="Simpan ke File Excel"><i class="fas fa-download fz-18"></i></button><button id="btn-reset" type="button" class="btn btn-icon btn-round btn-danger" data-toggle="tooltip" title="Ulangi"><i class="fas fa-redo fz-18 fa-flip-horizontal"></i></button>
+				</div>
+			</div>
+			<div class="alert alert-warning pl-3 pr-5 mb-4 alert-dismissible fade show" role="alert">
+				<button type="button" aria-hidden="true" class="close z-3 pt-1 pb-45" data-notify="dismiss" data-dismiss="alert" aria-label="Tutup" style="position: absolute; right: 10px; top: 5px; z-index: 1033;">×</button>
+				<div class="row row-8">
+					<div class="col-auto pt-1"><i class="fas fa-info text-white bg-warning fz-22 rounded-circle text-center" style="width: 35px; height: 35px; line-height: 35px;"></i></div>
+					<div class="col">
+						<div data-notify="message" class="text-muted">
+							<div>Kaizala mencatat 2 waktu presensi, yaitu <span class="fw-7">ResponseTime (UTC)</span> dan <span class="fw-7">Server Receipt Timestamp (UTC)</span>. ResponseTime mengacu pada waktu yang tertera pada <i>smartphone</i> masing-masing pengguna, sedangkan Server Receipt Timestamp mengacu pada waktu yang tercatat pada server.</div>
+							<div class="mt-2">Pengguna dapat mengubah jam pada <i>smartphone</i>-nya untuk mendapatkan waktu presensi ResponseTime sesuai dengan yang diinginkannya. Dengan demikian, kami menyarankan untuk menggunakan waktu presensi yang mengacu pada Server Receipt Timestamp untuk menghindari tindak kecurangan tersebut.</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card mx--a mx-sm-0">
+				<div class="card-header">
+					<div class="row">
+						<div class="col">
+							<div class="custom-control custom-radio">
+								<input type="radio" id="display_setting1" name="display_setting" class="custom-control-input" value="0" checked>
+								<label class="custom-control-label cur-p" for="display_setting1">Gabungkan presensi masuk & pulang</label>
+							</div>
+							<div class="custom-control custom-radio">
+								<input type="radio" id="display_setting2" name="display_setting" class="custom-control-input" value="1">
+								<label class="custom-control-label cur-p" for="display_setting2">Pisahkan tiap presensi</label>
+							</div>
+						</div>
+						<div class="col-xl-auto ml-xl-auto">
+							<hr class="mx--35 d-xl-none">
+							<div>
+								<div class="custom-control custom-radio">
+									<input type="radio" id="time_setting1" name="time_setting" class="custom-control-input" value="Server Receipt Timestamp (UTC)" checked>
+									<label class="custom-control-label cur-p" for="time_setting1">Server Receipt Timestamp</label>
+								</div>
+								<div class="custom-control custom-radio">
+									<input type="radio" id="time_setting2" name="time_setting" class="custom-control-input" value="ResponseTime (UTC)">
+									<label class="custom-control-label cur-p" for="time_setting2">ResponseTime</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<table class="table table-hover table-sm w-100 td3-d-none td6-d-none" id="table"></table>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/id.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.8.9/jquery.csv.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.20/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.1/shim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.1/xlsx.full.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.3.0/jszip.min.js"></script>
+	<script src="lib/atlantis-lite/mod/atlantis.mod.js"></script>
+	<script src="assets/js/main.js?v=1.4.1"></script>
+	<script>const DEV = false;</script>
+	<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+</body>
+</html>
